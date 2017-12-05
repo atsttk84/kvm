@@ -1,0 +1,51 @@
+#version=DEVEL
+# System authorization information
+auth --enableshadow --passalgo=sha512
+# Use network installation
+url --url="http://ftp.riken.jp/Linux/centos/7/os/x86_64/"
+# Use graphical install
+graphical
+# Run the Setup Agent on first boot
+firstboot --enable
+ignoredisk --only-use=sda
+# Keyboard layouts
+keyboard --vckeymap=jp --xlayouts='jp','us'
+# System language
+lang en_US.UTF-8
+
+# Network information
+network  --bootproto=dhcp --device=enp0s3 --ipv6=auto --activate
+network  --hostname=kvm.localnet
+
+# Root password
+rootpw --iscrypted $6$Sq.ArNVj9d7qSgP1$F4dMsks2kYvhXvRaSX.ddEUlc3BR2rtgxepF41ePce.DifK2HH7JGr8mX4UjZczTXi2tlo0JFywAySVJBsRcc1
+# System services
+services --disabled="chronyd"
+# System timezone
+timezone Asia/Tokyo --isUtc --nontp
+# System bootloader configuration
+bootloader --append=" crashkernel=auto" --location=mbr --boot-drive=sda
+autopart --type=lvm
+# Partition clearing information
+clearpart --all --initlabel --drives=sda
+
+%packages
+@^minimal
+@core
+@virtualization-hypervisor
+@virtualization-client
+@virtualization-platform
+@virtualization-tools
+kexec-tools
+
+%end
+
+%addon com_redhat_kdump --enable --reserve-mb='auto'
+
+%end
+
+%anaconda
+pwpolicy root --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+pwpolicy user --minlen=6 --minquality=1 --notstrict --nochanges --emptyok
+pwpolicy luks --minlen=6 --minquality=1 --notstrict --nochanges --notempty
+%end

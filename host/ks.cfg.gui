@@ -30,12 +30,21 @@ autopart --type=lvm
 clearpart --all --initlabel --drives=sda
 
 %packages
-@^minimal
+@^graphical-server-environment
+@base
 @core
+@desktop-debugging
+@fonts
+@gnome-desktop
+@guest-agents
+@guest-desktop-agents
+@hardware-monitoring
+@input-methods
 @virtualization-hypervisor
 @virtualization-client
 @virtualization-platform
 @virtualization-tools
+@x11
 kexec-tools
 
 %end
